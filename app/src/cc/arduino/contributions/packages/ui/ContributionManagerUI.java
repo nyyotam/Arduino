@@ -30,27 +30,27 @@
 package cc.arduino.contributions.packages.ui;
 
 import cc.arduino.contributions.DownloadableContribution;
-import cc.arduino.contributions.GPGDetachedSignatureVerifier;
 import cc.arduino.contributions.packages.ContributedPlatform;
 import cc.arduino.contributions.packages.ContributionInstaller;
-import cc.arduino.contributions.packages.ContributionsIndexer;
 import cc.arduino.contributions.ui.*;
 import cc.arduino.utils.Progress;
+import processing.app.BaseNoGui;
 import processing.app.I18n;
-import processing.app.Platform;
 
 import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
+
 import java.awt.*;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import static processing.app.I18n._;
+import static processing.app.I18n.tr;
 
 @SuppressWarnings("serial")
 public class ContributionManagerUI extends InstallerJDialog {
 
-  private final Platform platform;
+  private final ContributionInstaller installer;
 
   @Override
   protected FilteredAbstractTableModel createContribModel() {
@@ -62,15 +62,16 @@ public class ContributionManagerUI extends InstallerJDialog {
   }
 
   @Override
-  protected InstallerTableCell createCellRenderer() {
-    return new ContributedPlatformTableCell();
+  protected TableCellRenderer createCellRenderer() {
+    return new ContributedPlatformTableCellRenderer();
   }
 
   @Override
   protected InstallerTableCell createCellEditor() {
-    return new ContributedPlatformTableCell() {
+    return new ContributedPlatformTableCellEditor() {
       @Override
-      protected void onInstall(ContributedPlatform selected, ContributedPlatform installed) {
+      protected void onInstall(ContributedPlatform selected,
+                               ContributedPlatform installed) {
         if (selected.isReadOnly()) {
           onRemovePressed(installed, false);
         } else {
@@ -85,17 +86,17 @@ public class ContributionManagerUI extends InstallerJDialog {
     };
   }
 
-  public ContributionManagerUI(Frame parent, Platform platform) {
-    super(parent, _("Boards Manager"), Dialog.ModalityType.APPLICATION_MODAL, _("Unable to reach Arduino.cc due to possible network issues."));
-    this.platform = platform;
+  public ContributionManagerUI(Frame parent, ContributionInstaller installer) {
+    super(parent, tr("Boards Manager"), Dialog.ModalityType.APPLICATION_MODAL,
+        tr("Unable to reach Arduino.cc due to possible network issues."));
+    this.installer = installer;
   }
 
-  public void setIndexer(ContributionsIndexer indexer) {
-    DropdownItem<DownloadableContribution> previouslySelectedCategory = (DropdownItem<DownloadableContribution>) categoryChooser.getSelectedItem();
+  public void updateUI() {
+    DropdownItem<DownloadableContribution> previouslySelectedCategory = (DropdownItem<DownloadableContribution>) categoryChooser
+        .getSelectedItem();
 
     categoryChooser.removeActionListener(categoryChooserActionListener);
-
-    getContribModel().setIndexer(indexer);
 
     categoryFilter = null;
     categoryChooser.removeAllItems();
@@ -106,8 +107,8 @@ public class ContributionManagerUI extends InstallerJDialog {
 
     // Enable categories combo only if there are two or more choices
     categoryChooser.addItem(new DropdownAllCoresItem());
-    categoryChooser.addItem(new DropdownUpdatableCoresItem(indexer));
-    Collection<String> categories = indexer.getCategories();
+    categoryChooser.addItem(new DropdownUpdatableCoresItem());
+    Collection<String> categories = BaseNoGui.indexer.getCategories();
     for (String s : categories) {
       categoryChooser.addItem(new DropdownCoreOfCategoryItem(s));
     }
@@ -116,14 +117,6 @@ public class ContributionManagerUI extends InstallerJDialog {
     } else {
       categoryChooser.setSelectedIndex(0);
     }
-
-    // Create ConstributionInstaller tied with the provided index
-    installer = new ContributionInstaller(indexer, platform, new GPGDetachedSignatureVerifier()) {
-      @Override
-      public void onProgress(Progress progress) {
-        setProgress(progress);
-      }
-    };
   }
 
   public void setProgress(Progress progress) {
@@ -134,7 +127,6 @@ public class ContributionManagerUI extends InstallerJDialog {
    * Installer methods follows
    */
 
-  private ContributionInstaller installer;
   private Thread installerThread = null;
 
   @Override
@@ -151,7 +143,8 @@ public class ContributionManagerUI extends InstallerJDialog {
     installerThread = new Thread(() -> {
       try {
         setProgressVisible(true, "");
-        List<String> downloadedPackageIndexFiles = installer.updateIndex();
+        List<String> downloadedPackageIndexFiles = installer
+            .updateIndex(this::setProgress);
         installer.deleteUnknownFiles(downloadedPackageIndexFiles);
         onIndexesUpdated();
       } catch (Exception e) {
@@ -160,20 +153,24 @@ public class ContributionManagerUI extends InstallerJDialog {
         setProgressVisible(false, "");
       }
     });
-    installerThread.setUncaughtExceptionHandler(new InstallerJDialogUncaughtExceptionHandler(this, noConnectionErrorMessage));
+    installerThread.setName("ContributionManager Update Thread");
+    installerThread
+        .setUncaughtExceptionHandler(new InstallerJDialogUncaughtExceptionHandler(
+            this, noConnectionErrorMessage));
     installerThread.start();
   }
 
-  public void onInstallPressed(final ContributedPlatform platformToInstall, final ContributedPlatform platformToRemove) {
+  public void onInstallPressed(final ContributedPlatform platformToInstall,
+                               final ContributedPlatform platformToRemove) {
     clearErrorMessage();
     installerThread = new Thread(() -> {
       List<String> errors = new LinkedList<>();
       try {
-        setProgressVisible(true, _("Installing..."));
-        errors.addAll(installer.install(platformToInstall));
+        setProgressVisible(true, tr("Installing..."));
         if (platformToRemove != null && !platformToRemove.isReadOnly()) {
           errors.addAll(installer.remove(platformToRemove));
         }
+        errors.addAll(installer.install(platformToInstall, this::setProgress));
         onIndexesUpdated();
       } catch (Exception e) {
         throw new RuntimeException(e);
@@ -184,15 +181,25 @@ public class ContributionManagerUI extends InstallerJDialog {
         }
       }
     });
-    installerThread.setUncaughtExceptionHandler(new InstallerJDialogUncaughtExceptionHandler(this, noConnectionErrorMessage));
+    installerThread.setName("ContributionManager Install Thread");
+    installerThread
+        .setUncaughtExceptionHandler(new InstallerJDialogUncaughtExceptionHandler(
+            this, noConnectionErrorMessage));
     installerThread.start();
   }
 
-  public void onRemovePressed(final ContributedPlatform platform, boolean showWarning) {
+  public void onRemovePressed(final ContributedPlatform platform,
+                              boolean showWarning) {
     clearErrorMessage();
 
     if (showWarning) {
-      int chosenOption = JOptionPane.showConfirmDialog(this, I18n.format(_("Do you want to remove {0}?\nIf you do so you won't be able to use {0} any more."), platform.getName()), _("Please confirm boards deletion"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+      int chosenOption = JOptionPane
+          .showConfirmDialog(this,
+                             I18n.format(tr("Do you want to remove {0}?\nIf you do so you won't be able to use {0} any more."),
+                                         platform.getName()),
+                             tr("Please confirm boards deletion"),
+                             JOptionPane.YES_NO_OPTION,
+                             JOptionPane.QUESTION_MESSAGE);
       if (chosenOption != JOptionPane.YES_OPTION) {
         return;
       }
@@ -200,7 +207,7 @@ public class ContributionManagerUI extends InstallerJDialog {
 
     installerThread = new Thread(() -> {
       try {
-        setProgressVisible(true, _("Removing..."));
+        setProgressVisible(true, tr("Removing..."));
         installer.remove(platform);
         onIndexesUpdated();
       } catch (Exception e) {
@@ -209,7 +216,10 @@ public class ContributionManagerUI extends InstallerJDialog {
         setProgressVisible(false, "");
       }
     });
-    installerThread.setUncaughtExceptionHandler(new InstallerJDialogUncaughtExceptionHandler(this, noConnectionErrorMessage));
+    installerThread.setName("ContributionManager Remove Thread");
+    installerThread
+        .setUncaughtExceptionHandler(new InstallerJDialogUncaughtExceptionHandler(
+            this, noConnectionErrorMessage));
     installerThread.start();
   }
 

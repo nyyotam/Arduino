@@ -29,6 +29,7 @@
 
 package cc.arduino.packages.uploaders;
 
+import cc.arduino.CompilerUtils;
 import cc.arduino.packages.BoardPort;
 import cc.arduino.packages.Uploader;
 import cc.arduino.packages.ssh.*;
@@ -38,15 +39,19 @@ import com.jcraft.jsch.Session;
 import processing.app.BaseNoGui;
 import processing.app.I18n;
 import processing.app.PreferencesData;
-import processing.app.debug.*;
-import processing.app.helpers.*;
+import processing.app.debug.RunnerException;
+import processing.app.debug.TargetPlatform;
+import processing.app.helpers.PreferencesMap;
+import processing.app.helpers.PreferencesMapException;
+import processing.app.helpers.StringReplacer;
+import processing.app.helpers.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import static processing.app.I18n._;
+import static processing.app.I18n.tr;
 
 public class SSHUploader extends Uploader {
 
@@ -70,7 +75,7 @@ public class SSHUploader extends Uploader {
   @Override
   public boolean uploadUsingPreferences(File sourcePath, String buildPath, String className, boolean usingProgrammer, List<String> warningsAccumulator) throws RunnerException, PreferencesMapException {
     if (usingProgrammer) {
-      throw new RunnerException(_("Network upload using programmer not supported"));
+      throw new RunnerException(tr("Network upload using programmer not supported"));
     }
 
     TargetPlatform targetPlatform = BaseNoGui.getTargetPlatform();
@@ -105,6 +110,8 @@ public class SSHUploader extends Uploader {
       SSHClientSetupChainRing sshClientSetupChain = new SSHConfigFileSetup(new SSHPwdSetup());
       session = sshClientSetupChain.setup(port, jSch);
 
+      session.setConfig("PreferredAuthentications", "publickey,keyboard-interactive,password");
+
       session.setUserInfo(new NoInteractionUserInfo(PreferencesData.get("runtime.pwd." + port.getAddress())));
       session.connect(30000);
 
@@ -117,7 +124,7 @@ public class SSHUploader extends Uploader {
       if (!coreMissesRemoteUploadTool && mergedSketch.exists()) {
         sketchToCopy = mergedSketch;
       } else {
-        sketchToCopy = processing.app.debug.Compiler.findCompiledSketch(prefs);
+        sketchToCopy = new CompilerUtils().findCompiledSketch(prefs);
       }
       scpFiles(scp, ssh, sourcePath, sketchToCopy, warningsAccumulator);
 
@@ -132,7 +139,7 @@ public class SSHUploader extends Uploader {
         return false;
       }
       if (e.getMessage().contains("Connection refused")) {
-        throw new RunnerException(I18n.format("Unable to connect to {0}", port.getAddress()));
+        throw new RunnerException(I18n.format(tr("Unable to connect to {0}"), port.getAddress()));
       }
       throw new RunnerException(e);
     } catch (Exception e) {
@@ -198,11 +205,11 @@ public class SSHUploader extends Uploader {
       return false;
     }
     if (!www.canExecute()) {
-      warningsAccumulator.add(_("Problem accessing files in folder ") + www);
+      warningsAccumulator.add(I18n.format(tr("Problem accessing files in folder \"{0}\""), www));
       return false;
     }
     if (!ssh.execSyncCommand("special-storage-available")) {
-      warningsAccumulator.add(_("Problem accessing board folder /www/sd"));
+      warningsAccumulator.add(tr("Problem accessing board folder /www/sd"));
       return false;
     }
     return true;

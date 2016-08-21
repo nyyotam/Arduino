@@ -32,8 +32,8 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import static processing.app.I18n._;
-
+import static processing.app.I18n.tr;
+import static processing.app.Theme.scale;
 
 /**
  * Panel just below the editing area that contains status messages.
@@ -67,6 +67,10 @@ public class EditorStatus extends JPanel {
     FGCOLOR[5] = Theme.getColor("status.notice.fgcolor");
   }
 
+  // value for the size bars, buttons, etc
+  // TODO: Should be a Theme value?
+  static final int GRID_SIZE = 33;
+
   private final Editor editor;
   private final Font font;
 
@@ -93,8 +97,9 @@ public class EditorStatus extends JPanel {
     initialize();
   }
 
-  private void clearState() {
+  public void clearState() {
     changeState(NOTICE);
+    repaint();
   }
 
   private void changeState(int newMode) {
@@ -214,15 +219,15 @@ public class EditorStatus extends JPanel {
       offscreen = createImage(imageW, imageH);
     }
 
-    Graphics graphics = offscreen.getGraphics();
-    graphics.setColor(BGCOLOR[mode]);
-    graphics.fillRect(0, 0, imageW, imageH);
-    graphics.setColor(FGCOLOR[mode]);
+    Graphics2D g = Theme.setupGraphics2D(offscreen.getGraphics());
+    g.setColor(BGCOLOR[mode]);
+    g.fillRect(0, 0, imageW, imageH);
+    g.setColor(FGCOLOR[mode]);
 
-    graphics.setFont(font); // needs to be set each time on osx
-    int ascent = graphics.getFontMetrics().getAscent();
+    g.setFont(font); // needs to be set each time on osx
+    int ascent = g.getFontMetrics().getAscent();
     assert message != null;
-    graphics.drawString(message, Preferences.GUI_SMALL, (sizeH + ascent) / 2);
+    g.drawString(message, Preferences.GUI_SMALL, (sizeH + ascent) / 2);
 
     screen.drawImage(offscreen, 0, 0, null);
   }
@@ -335,19 +340,19 @@ public class EditorStatus extends JPanel {
     add(progressBar);
     progressBar.setVisible(false);
 
-    copyErrorButton = new JButton(_("Copy error messages"));
+    copyErrorButton = new JButton(tr("Copy error messages"));
     add(copyErrorButton);
     copyErrorButton.setVisible(false);
     copyErrorButton.addActionListener(e -> {
       String message1 = "";
-      message1 += _("Arduino: ") + BaseNoGui.VERSION_NAME_LONG + " (" + System.getProperty("os.name") + "), ";
-      message1 += _("Board: ") + "\"" + BaseNoGui.getBoardPreferences().get("name") + "\"\n\n";
+      message1 += tr("Arduino: ") + BaseNoGui.VERSION_NAME_LONG + " (" + System.getProperty("os.name") + "), ";
+      message1 += tr("Board: ") + "\"" + BaseNoGui.getBoardPreferences().get("name") + "\"\n\n";
       message1 += editor.console.getText();
       if (!(PreferencesData.getBoolean("build.verbose"))) {
         message1 += "\n\n";
-        message1 += "  " + _("This report would have more information with") + "\n";
-        message1 += "  \"" + _("Show verbose output during compilation") + "\"\n";
-        message1 += "  " + _("enabled in File > Preferences.") + "\n";
+        message1 += tr("This report would have more information with\n" +
+                       "\"Show verbose output during compilation\"\n" +
+                       "option enabled in File -> Preferences.\n");
       }
       Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
       StringSelection data = new StringSelection(message1);
@@ -394,11 +399,11 @@ public class EditorStatus extends JPanel {
   }
 
   public Dimension getMinimumSize() {
-    return new Dimension(300, Preferences.GRID_SIZE);
+    return scale(new Dimension(300, GRID_SIZE));
   }
 
   public Dimension getMaximumSize() {
-    return new Dimension(3000, Preferences.GRID_SIZE);
+    return scale(new Dimension(3000, GRID_SIZE));
   }
 
   public boolean isErr() {

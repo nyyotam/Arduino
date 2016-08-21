@@ -35,7 +35,6 @@ import cc.arduino.packages.discoverers.network.BoardReachabilityFilter;
 import cc.arduino.packages.discoverers.network.NetworkChecker;
 import org.apache.commons.compress.utils.IOUtils;
 import processing.app.BaseNoGui;
-import processing.app.helpers.PreferencesMap;
 import processing.app.zeroconf.jmdns.ArduinoDNSTaskStarter;
 
 import javax.jmdns.*;
@@ -135,16 +134,31 @@ public class NetworkDiscovery implements Discovery, ServiceListener, cc.arduino.
       String address = inetAddress.getHostAddress();
       String name = serviceEvent.getName();
 
-      PreferencesMap prefs = null;
+      BoardPort port = new BoardPort();
+
       String board = null;
       String description = null;
       if (info.hasData()) {
-        prefs = new PreferencesMap();
         board = info.getPropertyString("board");
         description = info.getPropertyString("description");
-        prefs.put("board", board);
-        prefs.put("distro_version", info.getPropertyString("distro_version"));
-        prefs.put("port", "" + info.getPort());
+        port.getPrefs().put("board", board);
+        port.getPrefs().put("distro_version", info.getPropertyString("distro_version"));
+        port.getPrefs().put("port", "" + info.getPort());
+        
+        //Add additional fields to permit generic ota updates
+        //and make sure we do not intefere with Arduino boards
+        // define "ssh_upload=no" TXT property to use generic uploader
+        // define "tcp_check=no" TXT property if you are not using TCP
+        // define "auth_upload=yes" TXT property if you want to use authenticated generic upload
+        String useSSH = info.getPropertyString("ssh_upload");
+        String checkTCP = info.getPropertyString("tcp_check");
+        String useAuth = info.getPropertyString("auth_upload");
+        if(useSSH == null || !useSSH.contentEquals("no")) useSSH = "yes";
+        if(checkTCP == null || !checkTCP.contentEquals("no")) checkTCP = "yes";
+        if(useAuth == null || !useAuth.contentEquals("yes")) useAuth = "no";
+        port.getPrefs().put("ssh_upload", useSSH);
+        port.getPrefs().put("tcp_check", checkTCP);
+        port.getPrefs().put("auth_upload", useAuth);
       }
 
       String label = name + " at " + address;
@@ -157,11 +171,9 @@ public class NetworkDiscovery implements Discovery, ServiceListener, cc.arduino.
         label += " (" + description + ")";
       }
 
-      BoardPort port = new BoardPort();
       port.setAddress(address);
       port.setBoardName(name);
       port.setProtocol("network");
-      port.setPrefs(prefs);
       port.setLabel(label);
 
       synchronized (boardPortsDiscoveredWithJmDNS) {

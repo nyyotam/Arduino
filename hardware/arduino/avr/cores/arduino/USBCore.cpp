@@ -18,6 +18,7 @@
 
 #include "USBAPI.h"
 #include "PluggableUSB.h"
+#include <stdlib.h>
 
 #if defined(USBCON)
 
@@ -69,10 +70,10 @@ const u8 STRING_MANUFACTURER[] PROGMEM = USB_MANUFACTURER;
 
 //	DEVICE DESCRIPTOR
 const DeviceDescriptor USB_DeviceDescriptor =
-	D_DEVICE(0x00,0x00,0x00,64,USB_VID,USB_PID,0x100,IMANUFACTURER,IPRODUCT,0,1);
+	D_DEVICE(0x00,0x00,0x00,64,USB_VID,USB_PID,0x100,IMANUFACTURER,IPRODUCT,ISERIAL,1);
 
 const DeviceDescriptor USB_DeviceDescriptorB =
-	D_DEVICE(0xEF,0x02,0x01,64,USB_VID,USB_PID,0x100,IMANUFACTURER,IPRODUCT,0,1);
+	D_DEVICE(0xEF,0x02,0x01,64,USB_VID,USB_PID,0x100,IMANUFACTURER,IPRODUCT,ISERIAL,1);
 
 //==================================================================
 //==================================================================
@@ -110,7 +111,7 @@ static inline void ClearOUT(void)
 	UEINTX = ~(1<<RXOUTI);
 }
 
-void Recv(volatile u8* data, u8 count)
+static inline void Recv(volatile u8* data, u8 count)
 {
 	while (count--)
 		*data++ = UEDATX;
@@ -253,7 +254,7 @@ u8 USB_SendSpace(u8 ep)
 	LockEP lock(ep);
 	if (!ReadWriteAllowed())
 		return 0;
-	return 64 - FifoByteCount();
+	return USB_EP_SIZE - FifoByteCount();
 }
 
 //	Blocking Send of data to an endpoint
@@ -308,24 +309,20 @@ int USB_Send(u8 ep, const void* d, int len)
 	return r;
 }
 
-u8 _initEndpoints[] =
+u8 _initEndpoints[USB_ENDPOINTS] =
 {
-	0,
+	0,                      // Control Endpoint
 	
-	EP_TYPE_INTERRUPT_IN,		// CDC_ENDPOINT_ACM
-	EP_TYPE_BULK_OUT,			// CDC_ENDPOINT_OUT
-	EP_TYPE_BULK_IN,			// CDC_ENDPOINT_IN
+	EP_TYPE_INTERRUPT_IN,   // CDC_ENDPOINT_ACM
+	EP_TYPE_BULK_OUT,       // CDC_ENDPOINT_OUT
+	EP_TYPE_BULK_IN,        // CDC_ENDPOINT_IN
 
-#ifdef PLUGGABLE_USB_ENABLED
-	//allocate 3 endpoints and remove const so they can be changed by the user
-	0,
-	0,
-	0,
-#endif
+	// Following endpoints are automatically initialized to 0
 };
 
 #define EP_SINGLE_64 0x32	// EP0
 #define EP_DOUBLE_64 0x36	// Other endpoints
+#define EP_SINGLE_16 0x12
 
 static
 void InitEP(u8 index, u8 type, u8 size)
@@ -344,7 +341,13 @@ void InitEndpoints()
 		UENUM = i;
 		UECONX = (1<<EPEN);
 		UECFG0X = _initEndpoints[i];
+#if USB_EP_SIZE == 16
+		UECFG1X = EP_SINGLE_16;
+#elif USB_EP_SIZE == 64
 		UECFG1X = EP_DOUBLE_64;
+#else
+#error Unsupported value for USB_EP_SIZE
+#endif
 	}
 	UERST = 0x7E;	// And reset them
 	UERST = 0;
@@ -360,13 +363,13 @@ bool ClassInterfaceRequest(USBSetup& setup)
 		return CDC_Setup(setup);
 
 #ifdef PLUGGABLE_USB_ENABLED
-	return PUSB_Setup(setup, i);
+	return PluggableUSB().setup(setup);
 #endif
 	return false;
 }
 
-int _cmark;
-int _cend;
+static int _cmark;
+static int _cend;
 void InitControl(int end)
 {
 	SetEP(0);
@@ -407,11 +410,12 @@ int USB_SendControl(u8 flags, const void* d, int len)
 // Send a USB descriptor string. The string is stored in PROGMEM as a
 // plain ASCII string but is sent out as UTF-16 with the correct 2-byte
 // prefix
-static bool USB_SendStringDescriptor(const u8*string_P, u8 string_len) {
+static bool USB_SendStringDescriptor(const u8*string_P, u8 string_len, uint8_t flags) {
         SendControl(2 + string_len * 2);
         SendControl(3);
+        bool pgm = flags & TRANSFER_PGM;
         for(u8 i = 0; i < string_len; i++) {
-                bool r = SendControl(pgm_read_byte(&string_P[i]));
+                bool r = SendControl(pgm ? pgm_read_byte(&string_P[i]) : string_P[i]);
                 r &= SendControl(0); // high byte
                 if(!r) {
                         return false;
@@ -421,24 +425,35 @@ static bool USB_SendStringDescriptor(const u8*string_P, u8 string_len) {
 }
 
 //	Does not timeout or cross fifo boundaries
-//	Will only work for transfers <= 64 bytes
-//	TODO
 int USB_RecvControl(void* d, int len)
 {
-	WaitOUT();
-	Recv((u8*)d,len);
-	ClearOUT();
+	auto length = len;
+	while(length)
+	{
+		// Dont receive more than the USB Control EP has to offer
+		// Use fixed 64 because control EP always have 64 bytes even on 16u2.
+		auto recvLength = length;
+		if(recvLength > 64){
+			recvLength = 64;
+		}
+
+		// Write data to fit to the end (not the beginning) of the array
+		WaitOUT();
+		Recv((u8*)d + len - length, recvLength);
+		ClearOUT();
+		length -= recvLength;
+	}
 	return len;
 }
 
-int SendInterfaces()
+static u8 SendInterfaces()
 {
 	u8 interfaces = 0;
 
 	CDC_GetInterface(&interfaces);
 
 #ifdef PLUGGABLE_USB_ENABLED
-	PUSB_GetInterface(&interfaces);
+	PluggableUSB().getInterface(&interfaces);
 #endif
 
 	return interfaces;
@@ -452,7 +467,7 @@ bool SendConfiguration(int maxlen)
 {
 	//	Count and measure interfaces
 	InitControl(0);	
-	int interfaces = SendInterfaces();
+	u8 interfaces = SendInterfaces();
 	ConfigDescriptor config = D_CONFIG(_cmark + sizeof(ConfigDescriptor),interfaces);
 
 	//	Now send them
@@ -462,7 +477,7 @@ bool SendConfiguration(int maxlen)
 	return true;
 }
 
-u8 _cdcComposite = 0;
+static u8 _cdcComposite = 0;
 
 static
 bool SendDescriptor(USBSetup& setup)
@@ -474,7 +489,7 @@ bool SendDescriptor(USBSetup& setup)
 
 	InitControl(setup.wLength);
 #ifdef PLUGGABLE_USB_ENABLED
-	ret = PUSB_GetDescriptor(t);
+	ret = PluggableUSB().getDescriptor(setup);
 	if (ret != 0) {
 		return (ret > 0 ? true : false);
 	}
@@ -493,10 +508,17 @@ bool SendDescriptor(USBSetup& setup)
 			desc_addr = (const u8*)&STRING_LANGUAGE;
 		}
 		else if (setup.wValueL == IPRODUCT) {
-			return USB_SendStringDescriptor(STRING_PRODUCT, strlen(USB_PRODUCT));
+			return USB_SendStringDescriptor(STRING_PRODUCT, strlen(USB_PRODUCT), TRANSFER_PGM);
 		}
 		else if (setup.wValueL == IMANUFACTURER) {
-			return USB_SendStringDescriptor(STRING_MANUFACTURER, strlen(USB_MANUFACTURER));
+			return USB_SendStringDescriptor(STRING_MANUFACTURER, strlen(USB_MANUFACTURER), TRANSFER_PGM);
+		}
+		else if (setup.wValueL == ISERIAL) {
+#ifdef PLUGGABLE_USB_ENABLED
+			char name[ISERIAL_MAX_LEN];
+			PluggableUSB().getShortName(name);
+			return USB_SendStringDescriptor((uint8_t*)name, strlen(name), 0);
+#endif
 		}
 		else
 			return false;
@@ -620,13 +642,19 @@ void USB_Flush(u8 ep)
 
 static inline void USB_ClockDisable()
 {
+#if defined(OTGPADE)
 	USBCON = (USBCON & ~(1<<OTGPADE)) | (1<<FRZCLK); // freeze clock and disable VBUS Pad
+#else // u2 Series
+	USBCON = (1 << FRZCLK); // freeze clock
+#endif
 	PLLCSR &= ~(1<<PLLE);  // stop PLL
 }
 
 static inline void USB_ClockEnable()
 {
+#if defined(UHWCON)
 	UHWCON |= (1<<UVREGE);			// power internal reg
+#endif
 	USBCON = (1<<USBE) | (1<<FRZCLK);	// clock frozen, usb enabled
 
 // ATmega32U4
@@ -637,6 +665,16 @@ static inline void USB_ClockEnable()
 	PLLCSR &= ~(1<<PINDIV);                  // Need  8 MHz xtal
 #else
 #error "Clock rate of F_CPU not supported"
+#endif
+
+#elif defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__) || defined(__AVR_ATmega32U2__) || defined(__AVR_ATmega16U2__) || defined(__AVR_ATmega8U2__)
+	// for the u2 Series the datasheet is confusing. On page 40 its called PINDIV and on page 290 its called PLLP0
+#if F_CPU == 16000000UL
+	// Need 16 MHz xtal
+	PLLCSR |= (1 << PLLP0);
+#elif F_CPU == 8000000UL
+	// Need 8 MHz xtal
+	PLLCSR &= ~(1 << PLLP0);
 #endif
 
 // AT90USB646, AT90USB647, AT90USB1286, AT90USB1287
@@ -670,10 +708,18 @@ static inline void USB_ClockEnable()
 	// strange behaviors when the board is reset using the serial
 	// port touch at 1200 bps. This delay fixes this behavior.
 	delay(1);
+#if defined(OTGPADE)
 	USBCON = (USBCON & ~(1<<FRZCLK)) | (1<<OTGPADE);	// start USB clock, enable VBUS Pad
+#else
+	USBCON &= ~(1 << FRZCLK);	// start USB clock
+#endif
 
 #if defined(RSTCPU)
+#if defined(LSM)
 	UDCON &= ~((1<<RSTCPU) | (1<<LSM) | (1<<RMWKUP) | (1<<DETACH));	// enable attach resistor, set full speed mode
+#else // u2 Series
+	UDCON &= ~((1 << RSTCPU) | (1 << RMWKUP) | (1 << DETACH));	// enable attach resistor, set full speed mode
+#endif
 #else
 	// AT90USB64x and AT90USB128x don't have RSTCPU
 	UDCON &= ~((1<<LSM) | (1<<RMWKUP) | (1<<DETACH));	// enable attach resistor, set full speed mode
