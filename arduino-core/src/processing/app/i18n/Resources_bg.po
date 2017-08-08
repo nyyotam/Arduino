@@ -12,6 +12,7 @@
 # Translators:
 # Translators:
 # Translators:
+# Translators:
 # Anton Stoychev <antitoxic@gmail.com>, 2013
 # Cristian Maglie <c.maglie@arduino.cc>, 2016
 # Ivaylo Malinov <mals@mail.bg>, 2015
@@ -21,7 +22,7 @@ msgstr ""
 "Project-Id-Version: Arduino IDE 1.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-03-29 10:24-0400\n"
-"PO-Revision-Date: 2016-03-08 21:29+0000\n"
+"PO-Revision-Date: 2016-08-16 11:24+0000\n"
 "Last-Translator: Cristian Maglie <c.maglie@arduino.cc>\n"
 "Language-Team: Bulgarian (http://www.transifex.com/mbanzi/arduino-ide-15/language/bg/)\n"
 "MIME-Version: 1.0\n"
@@ -124,6 +125,10 @@ msgstr "Подпапката на скицника не е валидна биб
 #: Editor.java:1116
 msgid "About Arduino"
 msgstr "Относно Ардуино"
+
+#: ../../../../../app/src/cc/arduino/i18n/Languages.java:41
+msgid "Acoli"
+msgstr ""
 
 #: ../../../../../app/src/processing/app/Base.java:1177
 msgid "Add .ZIP Library..."
@@ -334,6 +339,10 @@ msgstr "Беларуски"
 #: ../../../processing/app/Editor.java:707
 msgid "Board"
 msgstr "Платка"
+
+#: ../../../../../app//src/processing/app/Editor.java:2824
+msgid "Board Info"
+msgstr ""
 
 #: ../../../../../app/src/processing/app/Editor.java:2545
 #: ../../../../../app/src/processing/app/Editor.java:2641
@@ -947,13 +956,23 @@ msgstr "Естонски (Естония)"
 msgid "Examples"
 msgstr "Примери"
 
+#: ../../../../../app/src/processing/app/Base.java:1267
+msgid "Examples from Built-in Libraries"
+msgstr ""
+
 #: ../../../../../app/src/processing/app/Base.java:1244
 msgid "Examples from Custom Libraries"
 msgstr "Примери от потребителски библиотеки"
 
-#: ../../../../../app/src/processing/app/Base.java:1222
-msgid "Examples from Libraries"
-msgstr "Примери от библиотеки"
+#: ../../../../../app/src/processing/app/Base.java:1329
+msgid "Examples from Other Libraries"
+msgstr ""
+
+#: ../../../../../app/src/processing/app/Base.java:1287
+#: ../../../../../app/src/processing/app/Base.java:1298
+#, java-format
+msgid "Examples from {0} Libraries"
+msgstr ""
 
 #: ../../../../../app/src/processing/app/Editor.java:753
 msgid "Export canceled, changes must first be saved."
@@ -1057,6 +1076,10 @@ msgstr "Грузински"
 msgid "German"
 msgstr "Немски"
 
+#: ../../../../../app//src/processing/app/Editor.java:817
+msgid "Get Board Info"
+msgstr ""
+
 #: Editor.java:1054
 msgid "Getting Started"
 msgstr "Първи стъпки"
@@ -1114,6 +1137,10 @@ msgstr "Ей-й, ти голям писател се извъди!"
 #: Preferences.java:100
 msgid "Hungarian"
 msgstr "Унгарски"
+
+#: ../../../../../app/src/processing/app/Base.java:1319
+msgid "INCOMPATIBLE"
+msgstr ""
 
 #: FindReplace.java:96
 msgid "Ignore Case"
@@ -1217,6 +1244,10 @@ msgstr "Италиански"
 msgid "Japanese"
 msgstr "Японски"
 
+#: ../../../../../app/src/cc/arduino/i18n/Languages.java:81
+msgid "Kazakh"
+msgstr ""
+
 #: Preferences.java:104
 msgid "Korean"
 msgstr "Корейски"
@@ -1317,6 +1348,10 @@ msgstr "Трябва да укажете точно един файл-скица
 msgid "Name for new file:"
 msgstr "Име за нов файл:"
 
+#: ../../../../../app//src/processing/app/Editor.java:2809
+msgid "Native serial port, can't obtain info"
+msgstr ""
+
 #: ../../../processing/app/Preferences.java:149
 msgid "Nepali"
 msgstr "Непалски"
@@ -1324,6 +1359,10 @@ msgstr "Непалски"
 #: ../../../../../app/src/cc/arduino/view/preferences/Preferences.java:601
 msgid "Network"
 msgstr "Мрежа"
+
+#: ../../../../../app//src/processing/app/Editor.java:2804
+msgid "Network port, can't obtain info"
+msgstr ""
 
 #: ../../../../../app/src/processing/app/Editor.java:65
 msgid "Network ports"
@@ -1511,6 +1550,10 @@ msgstr "Моля, импортирайте библиотеката SPI от м�
 #: ../../../processing/app/debug/Compiler.java:529
 msgid "Please import the Wire library from the Sketch > Import Library menu."
 msgstr "Моля, импортирайте библиотеката Wire от менюто Скица > Импортиране на библиотека."
+
+#: ../../../../../app//src/processing/app/Editor.java:2799
+msgid "Please select a port to obtain board info"
+msgstr ""
 
 #: ../../../cc/arduino/packages/uploaders/SerialUploader.java:217
 #: ../../../cc/arduino/packages/uploaders/SerialUploader.java:262
@@ -1889,6 +1932,11 @@ msgstr "Местоположение на скицника:"
 msgid "Sketchbook path not defined"
 msgstr "Не е зададен път до скицника"
 
+#: ../../../../../arduino-core//src/cc/arduino/contributions/packages/ContributionsIndexer.java:96
+#, java-format
+msgid "Skipping contributed index file {0}, parsing error occured:"
+msgstr ""
+
 #: ../../../../../app/src/processing/app/Preferences.java:185
 msgid "Slovak"
 msgstr "Slovak"
@@ -1946,6 +1994,10 @@ msgstr "Talossan"
 #: Preferences.java:116
 msgid "Tamil"
 msgstr "Тамилски"
+
+#: ../../../../../app/src/cc/arduino/i18n/Languages.java:102
+msgid "Telugu"
+msgstr ""
 
 #: ../../../../../app/src/cc/arduino/i18n/Languages.java:100
 msgid "Thai"
@@ -2166,6 +2218,10 @@ msgstr "Отмяна"
 msgid "Unhandled type {0} in context key {1}"
 msgstr ""
 
+#: ../../../../../app//src/processing/app/Editor.java:2818
+msgid "Unknown board"
+msgstr ""
+
 #: ../../../../../arduino-core/src/cc/arduino/Compiler.java:86
 #, java-format
 msgid "Unknown sketch file extension: {0}"
@@ -2217,6 +2273,10 @@ msgstr "Качване"
 #: EditorToolbar.java:46 Editor.java:553
 msgid "Upload Using Programmer"
 msgstr "Качване чрез програматор"
+
+#: ../../../../../app//src/processing/app/Editor.java:2814
+msgid "Upload any sketch to obtain it"
+msgstr ""
 
 #: Editor.java:2403 Editor.java:2439
 msgid "Upload canceled."

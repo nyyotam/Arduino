@@ -12,7 +12,10 @@
 # Translators:
 # Translators:
 # Translators:
+# Translators:
 # Ade Malsasa Akbar <teknoloid@gmail.com>, 2013
+# adih bin asman <adih.venanda@gmail.com>, 2016
+# Cristian Maglie <c.maglie@arduino.cc>, 2016
 # Johannes Sutiktio <mitratrikarya@gmail.com>, 2015
 # Joshua Adiel Wijaya <ultima_aw@msn.com>, 2015
 # Rendiyono Wahyu Saputro <rendi.7936@gmail.com>, 2015
@@ -21,7 +24,7 @@ msgstr ""
 "Project-Id-Version: Arduino IDE 1.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-03-29 10:24-0400\n"
-"PO-Revision-Date: 2016-03-07 18:40+0000\n"
+"PO-Revision-Date: 2016-08-16 11:24+0000\n"
 "Last-Translator: Cristian Maglie <c.maglie@arduino.cc>\n"
 "Language-Team: Indonesian (http://www.transifex.com/mbanzi/arduino-ide-15/language/id/)\n"
 "MIME-Version: 1.0\n"
@@ -32,28 +35,28 @@ msgstr ""
 
 #: Preferences.java:358 Preferences.java:374
 msgid "  (requires restart of Arduino)"
-msgstr "if / else\n\nif/else allows greater control over the flow of code than the basic if statement, by allowing multiple tests to be grouped together. For example, an analog input could be tested and one action taken if the input was less than 500, and another action taken if the input was 500 or greater. The code would look like this:\n\nif (pinFiveInput < 500)\n{\n  // action A\n}\nelse\n{\n  // action B\n}\n\nelse can proceed another if test, so that multiple, mutually exclusive tests can be run at the same time.\n\nEach test will proceed to the next one until a true test is encountered. When a true test is found, its associated block of code is run, and the program then skips to the line following the entire if/else construction. If no test proves to be true, the default else block is executed, if one is present, and sets the default behavior.\n\nNote that an else if block may be used with or without a terminating else block and vice versa. An unlimited number of such else if branches is allowed.\n\nif (pinFiveInput < 500)\n{\n  // do Thing A\n}\nelse if (pinFiveInput >= 1000)\n{\n  // do Thing B\n}\nelse\n{\n  // do Thing C\n}\n\nAnother way to express branching, mutually exclusive tests, is with the switch case statement.\nSee also:\n\nswitch case Reference Home\n\nCorrections, suggestions, and new documentation should be posted to the Forum.\n\nThe text of the Arduino reference is licensed under a Creative Commons Attribution-ShareAlike 3.0 License. Code samples in the reference are released into the public domain.\nShare"
+msgstr "(memerlukan Arduino untuk mulai-ulang)"
 
 #: ../../../processing/app/debug/Compiler.java:529
 #, java-format
 msgid " Not used: {0}"
-msgstr ""
+msgstr "Tidak Digunakan: {0}"
 
 #: ../../../processing/app/debug/Compiler.java:525
 #, java-format
 msgid " Used: {0}"
-msgstr ""
+msgstr "Digunakan : {0}"
 
 #: ../../../../../arduino-core/src/cc/arduino/Compiler.java:558
 msgid ""
 "'Keyboard' not found. Does your sketch include the line '#include "
 "<Keyboard.h>'?"
-msgstr ""
+msgstr "'Keyboard' tidak ditemukan. apakah anda memasukkan garis pada sketsa anda '#include <Keyboard.h>'?"
 
 #: ../../../../../arduino-core/src/cc/arduino/Compiler.java:553
 msgid ""
 "'Mouse' not found. Does your sketch include the line '#include <Mouse.h>'?"
-msgstr ""
+msgstr "'Mouse' tidak ditemukan.  apakah anda memasukkan garis pada sketsa anda '#include <Mouse.h>'?"
 
 #: ../../../../../arduino-core/src/cc/arduino/Compiler.java:61
 msgid ""
@@ -71,7 +74,7 @@ msgstr ""
 
 #: ../../../processing/app/helpers/CommandlineParser.java:149
 msgid "--curdir no longer supported"
-msgstr ""
+msgstr "--curdir tidak lagi didukung"
 
 #: ../../../processing/app/Base.java:468
 msgid ""
@@ -125,9 +128,13 @@ msgstr ""
 msgid "About Arduino"
 msgstr "Tentang Arduino"
 
+#: ../../../../../app/src/cc/arduino/i18n/Languages.java:41
+msgid "Acoli"
+msgstr ""
+
 #: ../../../../../app/src/processing/app/Base.java:1177
 msgid "Add .ZIP Library..."
-msgstr ""
+msgstr "Menambahkan Library .ZIP"
 
 #: Editor.java:650
 msgid "Add File..."
@@ -334,6 +341,10 @@ msgstr "Bahasa Belarusia"
 #: ../../../processing/app/Editor.java:707
 msgid "Board"
 msgstr "Papan"
+
+#: ../../../../../app//src/processing/app/Editor.java:2824
+msgid "Board Info"
+msgstr ""
 
 #: ../../../../../app/src/processing/app/Editor.java:2545
 #: ../../../../../app/src/processing/app/Editor.java:2641
@@ -947,12 +958,22 @@ msgstr "Bahasa Estonia (Estonia)"
 msgid "Examples"
 msgstr "Contoh"
 
+#: ../../../../../app/src/processing/app/Base.java:1267
+msgid "Examples from Built-in Libraries"
+msgstr ""
+
 #: ../../../../../app/src/processing/app/Base.java:1244
 msgid "Examples from Custom Libraries"
 msgstr ""
 
-#: ../../../../../app/src/processing/app/Base.java:1222
-msgid "Examples from Libraries"
+#: ../../../../../app/src/processing/app/Base.java:1329
+msgid "Examples from Other Libraries"
+msgstr ""
+
+#: ../../../../../app/src/processing/app/Base.java:1287
+#: ../../../../../app/src/processing/app/Base.java:1298
+#, java-format
+msgid "Examples from {0} Libraries"
 msgstr ""
 
 #: ../../../../../app/src/processing/app/Editor.java:753
@@ -1057,6 +1078,10 @@ msgstr "Bahasa Georgia"
 msgid "German"
 msgstr "Bahasa Jerman"
 
+#: ../../../../../app//src/processing/app/Editor.java:817
+msgid "Get Board Info"
+msgstr ""
+
 #: Editor.java:1054
 msgid "Getting Started"
 msgstr "Persiapan untuk Mulai"
@@ -1114,6 +1139,10 @@ msgstr ""
 #: Preferences.java:100
 msgid "Hungarian"
 msgstr "Bahasa Hungaria"
+
+#: ../../../../../app/src/processing/app/Base.java:1319
+msgid "INCOMPATIBLE"
+msgstr ""
 
 #: FindReplace.java:96
 msgid "Ignore Case"
@@ -1217,6 +1246,10 @@ msgstr "Bahasa Italia"
 msgid "Japanese"
 msgstr "Bahasa Jepang"
 
+#: ../../../../../app/src/cc/arduino/i18n/Languages.java:81
+msgid "Kazakh"
+msgstr ""
+
 #: Preferences.java:104
 msgid "Korean"
 msgstr "Bahasa Korea"
@@ -1317,12 +1350,20 @@ msgstr "Harus menentukan setidaknya satu berkas sketsa"
 msgid "Name for new file:"
 msgstr "Nama untuk berkas baru:"
 
+#: ../../../../../app//src/processing/app/Editor.java:2809
+msgid "Native serial port, can't obtain info"
+msgstr ""
+
 #: ../../../processing/app/Preferences.java:149
 msgid "Nepali"
 msgstr "Bahasa Nepal"
 
 #: ../../../../../app/src/cc/arduino/view/preferences/Preferences.java:601
 msgid "Network"
+msgstr ""
+
+#: ../../../../../app//src/processing/app/Editor.java:2804
+msgid "Network port, can't obtain info"
 msgstr ""
 
 #: ../../../../../app/src/processing/app/Editor.java:65
@@ -1510,6 +1551,10 @@ msgstr ""
 
 #: ../../../processing/app/debug/Compiler.java:529
 msgid "Please import the Wire library from the Sketch > Import Library menu."
+msgstr ""
+
+#: ../../../../../app//src/processing/app/Editor.java:2799
+msgid "Please select a port to obtain board info"
 msgstr ""
 
 #: ../../../cc/arduino/packages/uploaders/SerialUploader.java:217
@@ -1889,6 +1934,11 @@ msgstr ""
 msgid "Sketchbook path not defined"
 msgstr ""
 
+#: ../../../../../arduino-core//src/cc/arduino/contributions/packages/ContributionsIndexer.java:96
+#, java-format
+msgid "Skipping contributed index file {0}, parsing error occured:"
+msgstr ""
+
 #: ../../../../../app/src/processing/app/Preferences.java:185
 msgid "Slovak"
 msgstr ""
@@ -1945,6 +1995,10 @@ msgstr ""
 
 #: Preferences.java:116
 msgid "Tamil"
+msgstr ""
+
+#: ../../../../../app/src/cc/arduino/i18n/Languages.java:102
+msgid "Telugu"
 msgstr ""
 
 #: ../../../../../app/src/cc/arduino/i18n/Languages.java:100
@@ -2166,6 +2220,10 @@ msgstr ""
 msgid "Unhandled type {0} in context key {1}"
 msgstr ""
 
+#: ../../../../../app//src/processing/app/Editor.java:2818
+msgid "Unknown board"
+msgstr ""
+
 #: ../../../../../arduino-core/src/cc/arduino/Compiler.java:86
 #, java-format
 msgid "Unknown sketch file extension: {0}"
@@ -2217,6 +2275,10 @@ msgstr "Unggah"
 #: EditorToolbar.java:46 Editor.java:553
 msgid "Upload Using Programmer"
 msgstr "Unggah Menggunakan Programmer"
+
+#: ../../../../../app//src/processing/app/Editor.java:2814
+msgid "Upload any sketch to obtain it"
+msgstr ""
 
 #: Editor.java:2403 Editor.java:2439
 msgid "Upload canceled."

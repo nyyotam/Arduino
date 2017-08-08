@@ -12,6 +12,7 @@
 # Translators:
 # Translators:
 # Translators:
+# Translators:
 # Anıl Özbek <ozbekanil@gmail.com>, 2013
 # Ayse Gokce Bor <aysegokcebor@gmail.com>, 2012
 # b <burakguelsen@gmail.com>, 2015
@@ -31,7 +32,7 @@
 # Oğuzhan Gençel <genceloguzhan@gmail.com>, 2015
 # washaq <onlynewuser@gmail.com>, 2014
 # sercan <e.srcnblky@gmail.com>, 2015
-# Ülgen Sarıkavak <inactive+ulgensrkvk@transifex.com>, 2012
+# Ülgen Sarıkavak <ulgensrkvk@gmail.com>, 2012,2016
 # Ülgen Sarıkavak <inactive+ulgensrkvk@transifex.com>, 2013-2014
 # Ülgen Sarıkavak <inactive+ulgensrkvk@transifex.com>, 2014
 # selengalp <yasinkaya.121@gmail.com>, 2014
@@ -42,7 +43,7 @@ msgstr ""
 "Project-Id-Version: Arduino IDE 1.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-03-29 10:24-0400\n"
-"PO-Revision-Date: 2016-03-08 21:33+0000\n"
+"PO-Revision-Date: 2016-08-16 11:24+0000\n"
 "Last-Translator: Cristian Maglie <c.maglie@arduino.cc>\n"
 "Language-Team: Turkish (http://www.transifex.com/mbanzi/arduino-ide-15/language/tr/)\n"
 "MIME-Version: 1.0\n"
@@ -120,7 +121,7 @@ msgstr "\"{0}\" adıyla bir dosya halihazırda \"{1}\"de mevcut"
 #: Editor.java:2169
 #, java-format
 msgid "A folder named \"{0}\" already exists. Can't open sketch."
-msgstr "\"{0}\" isminde bir klasör zaten var. Çalışma açılamıyor."
+msgstr "\"{0}\" isminde bir klasör zaten var. Taslak açılamıyor."
 
 #: Base.java:2690
 #, java-format
@@ -136,7 +137,7 @@ msgstr "Yeni bir Arduino sürümü mevcut,\nArduino indirme sayfasına gitmek is
 #: ../../../../../app/src/cc/arduino/contributions/BuiltInCoreIsNewerCheck.java:96
 #, java-format
 msgid "A newer {0} package is available"
-msgstr "Daha yeni bir {0} paket kullanıma hazır"
+msgstr "Daha yeni bir {0} paketi kullanıma hazır"
 
 #: ../../../../../app/src/processing/app/Base.java:2307
 msgid "A subfolder of your sketchbook is not a valid library"
@@ -145,6 +146,10 @@ msgstr "Taslak defterinin alt bir dosyası geçerli bir kütüphane değil"
 #: Editor.java:1116
 msgid "About Arduino"
 msgstr "Arduino Hakkında"
+
+#: ../../../../../app/src/cc/arduino/i18n/Languages.java:41
+msgid "Acoli"
+msgstr ""
 
 #: ../../../../../app/src/processing/app/Base.java:1177
 msgid "Add .ZIP Library..."
@@ -160,7 +165,7 @@ msgstr "Ek Devre Kartları Yöneticisi URL'leri"
 
 #: ../../../../../app/src/cc/arduino/view/preferences/Preferences.java:268
 msgid "Additional Boards Manager URLs: "
-msgstr "Ek Devre Kartları Yöneticisi URL'leri"
+msgstr "Ek Devre Kartları Yöneticisi URL'leri:"
 
 #: ../../../../../app/src/processing/app/Preferences.java:161
 msgid "Afrikaans"
@@ -189,7 +194,7 @@ msgstr "Kütüphane indeksi güncellenirken bir hata meydana geldi!"
 
 #: ../../../processing/app/BaseNoGui.java:528
 msgid "An error occurred while uploading the sketch"
-msgstr "Taslak yüklenirken bir hata oluştu."
+msgstr "Taslak yüklenirken bir hata oluştu"
 
 #: ../../../processing/app/BaseNoGui.java:506
 #: ../../../processing/app/BaseNoGui.java:551
@@ -217,7 +222,7 @@ msgstr "Aragonca"
 
 #: tools/Archiver.java:48
 msgid "Archive Sketch"
-msgstr "Çalışmayı Arşivle"
+msgstr "Taslağı Arşivle"
 
 #: tools/Archiver.java:109
 msgid "Archive sketch as:"
@@ -225,7 +230,7 @@ msgstr "Taslağı şu şekilde arşivle:"
 
 #: tools/Archiver.java:139
 msgid "Archive sketch canceled."
-msgstr "Çalışmayı arşivleme iptal edildi."
+msgstr "Taslağı arşivleme iptal edildi."
 
 #: tools/Archiver.java:75
 msgid ""
@@ -235,7 +240,7 @@ msgstr "Taslağın arşivlenmesi iptal edildi. Çünkü \ntaslak düzgün bir ş
 
 #: ../../../../../arduino-core/src/processing/app/I18n.java:24
 msgid "Arduino"
-msgstr ""
+msgstr "Arduino"
 
 #: ../../../processing/app/I18n.java:83
 msgid "Arduino ARM (32-bits) Boards"
@@ -324,7 +329,7 @@ msgstr "Vekil sunucu ayarlarını otomatik algıla"
 
 #: ../../../../../app/src/cc/arduino/view/preferences/Preferences.java:264
 msgid "Automatic"
-msgstr ""
+msgstr "Otomatik"
 
 #: ../../../../../app/src/cc/arduino/view/preferences/Preferences.java:474
 msgid "Automatic proxy configuration URL:"
@@ -355,6 +360,10 @@ msgstr "Belarusça"
 #: ../../../processing/app/Editor.java:707
 msgid "Board"
 msgstr "Kart"
+
+#: ../../../../../app//src/processing/app/Editor.java:2824
+msgid "Board Info"
+msgstr ""
 
 #: ../../../../../app/src/processing/app/Editor.java:2545
 #: ../../../../../app/src/processing/app/Editor.java:2641
@@ -500,7 +509,7 @@ msgstr "Yorum yap / Yorumu kaldır"
 
 #: ../../../../../arduino-core/src/processing/app/I18n.java:30
 msgid "Communication"
-msgstr ""
+msgstr "İletişim"
 
 #: ../../../../../app/src/cc/arduino/view/preferences/Preferences.java:266
 msgid "Compiler warnings: "
@@ -677,11 +686,11 @@ msgstr "Danimarkaca(Danimarka)"
 
 #: ../../../../../arduino-core/src/processing/app/I18n.java:36
 msgid "Data Processing"
-msgstr ""
+msgstr "Veri İşleme"
 
 #: ../../../../../arduino-core/src/processing/app/I18n.java:35
 msgid "Data Storage"
-msgstr ""
+msgstr "Veri Depolama"
 
 #: Editor.java:1224 Editor.java:2765
 msgid "Decrease Indent"
@@ -697,7 +706,7 @@ msgstr "Sil"
 
 #: ../../../../../arduino-core/src/processing/app/I18n.java:33
 msgid "Device Control"
-msgstr ""
+msgstr "Cihaz Kontrol"
 
 #: debug/Uploader.java:199
 msgid ""
@@ -968,13 +977,23 @@ msgstr "Estonyaca (Estonya)"
 msgid "Examples"
 msgstr "Örnekler"
 
+#: ../../../../../app/src/processing/app/Base.java:1267
+msgid "Examples from Built-in Libraries"
+msgstr ""
+
 #: ../../../../../app/src/processing/app/Base.java:1244
 msgid "Examples from Custom Libraries"
 msgstr "Özel (custom) Kütüphane Örnekleri"
 
-#: ../../../../../app/src/processing/app/Base.java:1222
-msgid "Examples from Libraries"
-msgstr "Kütüphanelerden Örnekler"
+#: ../../../../../app/src/processing/app/Base.java:1329
+msgid "Examples from Other Libraries"
+msgstr ""
+
+#: ../../../../../app/src/processing/app/Base.java:1287
+#: ../../../../../app/src/processing/app/Base.java:1298
+#, java-format
+msgid "Examples from {0} Libraries"
+msgstr ""
 
 #: ../../../../../app/src/processing/app/Editor.java:753
 msgid "Export canceled, changes must first be saved."
@@ -1078,6 +1097,10 @@ msgstr "Gürcüce"
 msgid "German"
 msgstr "Almanca"
 
+#: ../../../../../app//src/processing/app/Editor.java:817
+msgid "Get Board Info"
+msgstr ""
+
 #: Editor.java:1054
 msgid "Getting Started"
 msgstr "Başlarken..."
@@ -1135,6 +1158,10 @@ msgstr "Escher size saygılarını sunuyor"
 #: Preferences.java:100
 msgid "Hungarian"
 msgstr "Bulgarca"
+
+#: ../../../../../app/src/processing/app/Base.java:1319
+msgid "INCOMPATIBLE"
+msgstr ""
 
 #: FindReplace.java:96
 msgid "Ignore Case"
@@ -1238,6 +1265,10 @@ msgstr "İtalyanca"
 msgid "Japanese"
 msgstr "Japonca"
 
+#: ../../../../../app/src/cc/arduino/i18n/Languages.java:81
+msgid "Kazakh"
+msgstr ""
+
 #: Preferences.java:104
 msgid "Korean"
 msgstr "Korece"
@@ -1338,6 +1369,10 @@ msgstr "Bir program dosyası belirtilmeli"
 msgid "Name for new file:"
 msgstr "Yeni dosya için isim:"
 
+#: ../../../../../app//src/processing/app/Editor.java:2809
+msgid "Native serial port, can't obtain info"
+msgstr ""
+
 #: ../../../processing/app/Preferences.java:149
 msgid "Nepali"
 msgstr "Nepalce"
@@ -1345,6 +1380,10 @@ msgstr "Nepalce"
 #: ../../../../../app/src/cc/arduino/view/preferences/Preferences.java:601
 msgid "Network"
 msgstr "Ağ"
+
+#: ../../../../../app//src/processing/app/Editor.java:2804
+msgid "Network port, can't obtain info"
+msgstr ""
 
 #: ../../../../../app/src/processing/app/Editor.java:65
 msgid "Network ports"
@@ -1486,7 +1525,7 @@ msgstr "Aç..."
 
 #: ../../../../../arduino-core/src/processing/app/I18n.java:37
 msgid "Other"
-msgstr ""
+msgstr "Diğer"
 
 #: Editor.java:563
 msgid "Page Setup"
@@ -1532,6 +1571,10 @@ msgstr "Lütfen Program > İçeri Aktar menüsünü kullanarak SPI  kütüphanes
 #: ../../../processing/app/debug/Compiler.java:529
 msgid "Please import the Wire library from the Sketch > Import Library menu."
 msgstr "Lütfen Program > İçeri Aktar menüsünü kullanarak Wire kütüphanesini içeri aktarın."
+
+#: ../../../../../app//src/processing/app/Editor.java:2799
+msgid "Please select a port to obtain board info"
+msgstr ""
 
 #: ../../../cc/arduino/packages/uploaders/SerialUploader.java:217
 #: ../../../cc/arduino/packages/uploaders/SerialUploader.java:262
@@ -1652,7 +1695,7 @@ msgstr ""
 
 #: ../../../../../arduino-core/src/processing/app/I18n.java:26
 msgid "Recommended"
-msgstr ""
+msgstr "Tavsiye edilen"
 
 #: Editor.java:1138 Editor.java:1140 Editor.java:1390
 msgid "Redo"
@@ -1800,7 +1843,7 @@ msgstr "Gönder"
 
 #: ../../../../../arduino-core/src/processing/app/I18n.java:32
 msgid "Sensors"
-msgstr ""
+msgstr "Sensörler"
 
 #: EditorToolbar.java:41 EditorToolbar.java:46 Editor.java:669
 msgid "Serial Monitor"
@@ -1855,7 +1898,7 @@ msgstr "Aşağıdaki işlem sırasında ayrıntılı çıktı göster:"
 
 #: ../../../../../arduino-core/src/processing/app/I18n.java:31
 msgid "Signal Input/Output"
-msgstr ""
+msgstr "Sinyal Giriş/Çıkışı"
 
 #: Editor.java:607
 msgid "Sketch"
@@ -1909,6 +1952,11 @@ msgstr "Taslak defteri konumu:"
 #: ../../../processing/app/BaseNoGui.java:428
 msgid "Sketchbook path not defined"
 msgstr "Taslakkitabı yolu tanımlanmadı"
+
+#: ../../../../../arduino-core//src/cc/arduino/contributions/packages/ContributionsIndexer.java:96
+#, java-format
+msgid "Skipping contributed index file {0}, parsing error occured:"
+msgstr ""
 
 #: ../../../../../app/src/processing/app/Preferences.java:185
 msgid "Slovak"
@@ -1968,9 +2016,13 @@ msgstr "Talossan"
 msgid "Tamil"
 msgstr "Tamil"
 
+#: ../../../../../app/src/cc/arduino/i18n/Languages.java:102
+msgid "Telugu"
+msgstr ""
+
 #: ../../../../../app/src/cc/arduino/i18n/Languages.java:100
 msgid "Thai"
-msgstr ""
+msgstr "Tay Dili"
 
 #: debug/Compiler.java:414
 msgid "The 'BYTE' keyword is no longer supported."
@@ -1978,7 +2030,7 @@ msgstr "'BYTE' terimi artık desteklenmemektedir."
 
 #: ../../../processing/app/BaseNoGui.java:484
 msgid "The --upload option supports only one file at a time"
-msgstr "--upload fonksiyonu aynı anda sadece tek dosya yüklemeyi destekler."
+msgstr "--upload fonksiyonu aynı anda sadece tek dosya yüklemeyi destekler"
 
 #: debug/Compiler.java:426
 msgid "The Client class has been renamed EthernetClient."
@@ -2141,7 +2193,7 @@ msgstr "Ukraynaca"
 #: ../../../../../arduino-core/src/cc/arduino/packages/uploaders/SSHUploader.java:142
 #, java-format
 msgid "Unable to connect to {0}"
-msgstr ""
+msgstr "{0} 'a bağlanılamadı"
 
 #: ../../../processing/app/Editor.java:2524
 #: ../../../processing/app/NetworkMonitor.java:145
@@ -2186,6 +2238,10 @@ msgstr "Geri Al"
 #, java-format
 msgid "Unhandled type {0} in context key {1}"
 msgstr "Bağlam (context) anahtarı {1}'de işlenemeyen {0} tipi"
+
+#: ../../../../../app//src/processing/app/Editor.java:2818
+msgid "Unknown board"
+msgstr ""
 
 #: ../../../../../arduino-core/src/cc/arduino/Compiler.java:86
 #, java-format
@@ -2238,6 +2294,10 @@ msgstr "Yükle"
 #: EditorToolbar.java:46 Editor.java:553
 msgid "Upload Using Programmer"
 msgstr "Programlayıcıyı Kullanarak Yükle"
+
+#: ../../../../../app//src/processing/app/Editor.java:2814
+msgid "Upload any sketch to obtain it"
+msgstr ""
 
 #: Editor.java:2403 Editor.java:2439
 msgid "Upload canceled."
